@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,13 +7,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import {useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { deleteEmployee, loadEmployees } from "../redux/actions";
-import { Button} from "@mui/material";
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import { useHistory} from "react-router-dom";
+import { Button } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { useHistory } from "react-router-dom";
+import ShowLeavesModal from "./showLeaves";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,15 +37,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const Home = () => {
+  const [open, setOpen] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
-  const {users} = useSelector(state => state.data);
+  const { users } = useSelector((state) => state.data);
 
   const handleDelete = (id) => {
-     if(window.confirm("Are you sure you want to delete this employee?")) {
-       dispatch(deleteEmployee(id));
-     }
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+      dispatch(deleteEmployee(id));
+    }
   };
+
+  const handleOpen = () => setOpen(true);
+
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     dispatch(loadEmployees());
@@ -52,8 +58,29 @@ const Home = () => {
 
   return (
     <div>
-      <div style={{margin: "10px", textAlign: "right"}}>
-        <Button variant="contained" onClick={() => history.push('/addEmployee')}>Add New Employee</Button>
+      <div style={{ margin: "10px", textAlign: "right" }}>
+        <Button
+          variant="contained"
+          onClick={() => history.push("/addEmployee")}
+        >
+          Add New Employee
+        </Button>
+        <Button
+          style={{ marginLeft: "10px" }}
+          variant="contained"
+          onClick={() => history.push("/addLeave")}
+        >
+          Add Leave
+        </Button>
+        <Button
+          style={{ marginLeft: "10px" }}
+          variant="contained"
+          onClick={() => handleOpen()}
+        >
+          Show Leave
+        </Button>
+
+        <ShowLeavesModal open={open} handleClose={handleClose} />
       </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 900 }} aria-label="customized table">
@@ -68,23 +95,40 @@ const Home = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users && users.map((user) => (
-              <StyledTableRow key={user.id}>
-                <StyledTableCell component="th" scope="row" align="center">{user.firstname}</StyledTableCell>
-                <StyledTableCell align="center">{user.lastname}</StyledTableCell>
-                <StyledTableCell align="center">{user.email}</StyledTableCell>
-                <StyledTableCell align="center">{user.mobilenumber}</StyledTableCell>
-                <StyledTableCell align="center">{user.dateofbirth}</StyledTableCell>
-                <StyledTableCell align="center">
+            {users &&
+              users.map((user) => (
+                <StyledTableRow key={user.id}>
+                  <StyledTableCell component="th" scope="row" align="center">
+                    {user.firstname}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {user.lastname}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{user.email}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {user.mobilenumber}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {user.dateofbirth}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
                     <IconButton aria-label="delete">
-                      <DeleteIcon color="primary" onClick={() => handleDelete(user.id)}/>
+                      <DeleteIcon
+                        color="primary"
+                        onClick={() => handleDelete(user.id)}
+                      />
                     </IconButton>
                     <IconButton aria-label="edit">
-                      <EditIcon color="primary" onClick={() => history.push(`/updateEmployee/${user.id}`)}/>
+                      <EditIcon
+                        color="primary"
+                        onClick={() =>
+                          history.push(`/updateEmployee/${user.id}`)
+                        }
+                      />
                     </IconButton>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

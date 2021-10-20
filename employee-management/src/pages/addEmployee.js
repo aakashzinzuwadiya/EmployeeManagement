@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import {useDispatch} from "react-redux";
+import { Button, Box, TextField } from "@mui/material";
+
 import { addEmployee } from "../redux/actions";
 
 const AddEmployee = () => {

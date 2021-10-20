@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { useHistory, useParams } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import { addEmployee, getEmployee } from "../redux/actions";
+import { getEmployee, updateEmployee } from "../redux/actions";
 
 const UpdateEmployee = () => {
   const {id} = useParams();
@@ -35,7 +35,7 @@ const UpdateEmployee = () => {
       if (!firstname || !lastname || !email || !mobilenumber || !dateofbirth) {
         setError("Please provide all the input fields");
       } else {
-        dispatch(addEmployee(state));
+        dispatch(updateEmployee(state));
         history.push("/");
         setError("");
       }

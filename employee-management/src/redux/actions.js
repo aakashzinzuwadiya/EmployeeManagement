@@ -14,14 +14,31 @@ const employeeAdded = () => ({
     type: types.ADD_EMPLOYEE
 });
 
+const employeeUpdated = () => ({
+    type: types.UPDATE_EMPLOYEE
+});
+
 const getEmployeeById = (user) => ({
     type: types.GET_EMPLOYEE,
     payload: user
 });
 
+const leaveAdded = () => ({
+    type: types.ADD_LEAVE
+});
+
+const getLeaves = (leaves) => ({
+    type: types.GET_LEAVES,
+    payload: leaves
+});
+
+const leaveDeleted = () => ({
+    type: types.DELETE_LEAVE
+});
+
 export const loadEmployees = () => {
     return function (dispatch) {
-        axios.get(`${process.env.REACT_APP_API}`)
+        axios.get(`${process.env.REACT_APP_API}/user`)
         .then((resp) => {
             dispatch(getEmployees(resp.data));
         })
@@ -33,7 +50,7 @@ export const loadEmployees = () => {
 
 export const deleteEmployee = (id) => {
     return function (dispatch) {
-        axios.delete(`${process.env.REACT_APP_API}/${id}`)
+        axios.delete(`${process.env.REACT_APP_API}/user/${id}`)
         .then(() => {
             dispatch(employeeDeleted());
             dispatch(loadEmployees());
@@ -46,7 +63,7 @@ export const deleteEmployee = (id) => {
 
 export const addEmployee = (user) => {
     return function (dispatch) {
-        axios.post(`${process.env.REACT_APP_API}`, user)
+        axios.post(`${process.env.REACT_APP_API}/user`, user)
         .then(() => {
             dispatch(employeeAdded());
             dispatch(loadEmployees());
@@ -57,14 +74,64 @@ export const addEmployee = (user) => {
     }
 }
 
+export const updateEmployee = (user) => {
+    return function (dispatch) {
+        axios.put(`${process.env.REACT_APP_API}/user/${user.id}`, user)
+        .then(() => {
+            dispatch(employeeUpdated());
+            dispatch(loadEmployees());
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+}
+
 export const getEmployee = (id) => {
     return function (dispatch) {
-        axios.get(`${process.env.REACT_APP_API}/${id}`)
+        axios.get(`${process.env.REACT_APP_API}/user/${id}`)
         .then((resp) => {
             dispatch(getEmployeeById(resp.data));
         })
         .catch(error => {
             console.log(error);
         });
+    }
+}
+
+export const loadLeaves = () => {
+    return function (dispatch) {
+        axios.get(`${process.env.REACT_APP_API}/leaves`)
+        .then((resp) => {
+            dispatch(getLeaves(resp.data));
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+}
+
+export const addLeave = (leave) => {
+    return function (dispatch) {
+        axios.post(`${process.env.REACT_APP_API}/leaves`, leave)
+        .then(() => {
+            dispatch(leaveAdded());
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+}
+
+export const deleteLeave = (id) => {
+    return function (dispatch) {
+        axios.delete(`${process.env.REACT_APP_API}/leaves/${id}`)
+        .then(() => {
+            dispatch(leaveDeleted());
+            dispatch(loadLeaves()); 
+        })
+        .catch(error => {
+            console.log(error);
+        })
     }
 }
