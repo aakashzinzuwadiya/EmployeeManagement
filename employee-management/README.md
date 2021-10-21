@@ -4,13 +4,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-## 'npm run dev'
-
-To start the react app and json-server
-
-In the project directory, you can run:
+In the project directory, for react app you can run:
 
 ### `yarn start`
+
+In the project directory, for json server you can run:
+
+### `yarn server`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.

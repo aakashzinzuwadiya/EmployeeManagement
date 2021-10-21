@@ -47,7 +47,7 @@ const AddLeave = () => {
           Back
         </Button>
       </div>
-      <h1>Add New Employee</h1>
+      <h1>Add Leave</h1>
       {error && <h3 style={{color: "red"}}>{error}</h3>}
       <Box
         component="form"
